@@ -1,98 +1,185 @@
-import * as Device from 'expo-device';
-import { Platform, StyleSheet } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import React, { useState } from 'react';
+import { View, Text, Image, TextInput, TouchableOpacity, StyleSheet } from 'react-native';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-import { AnimatedIcon } from '@/components/animated-icon';
-import { HintRow } from '@/components/hint-row';
-import { ThemedText } from '@/components/themed-text';
-import { ThemedView } from '@/components/themed-view';
-import { WebBadge } from '@/components/web-badge';
-import { BottomTabInset, MaxContentWidth, Spacing } from '@/constants/theme';
+const Stack = createNativeStackNavigator();
 
-function getDevMenuHint() {
-  if (Platform.OS === 'web') {
-    return <ThemedText type="small">use browser devtools</ThemedText>;
-  }
-  if (Device.isDevice) {
-    return (
-      <ThemedText type="small">
-        shake device or press <ThemedText type="code">m</ThemedText> in terminal
-      </ThemedText>
-    );
-  }
-  const shortcut = Platform.OS === 'android' ? 'cmd+m (or ctrl+m)' : 'cmd+d';
+function LoginScreen({ navigation }: any) {
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
   return (
-    <ThemedText type="small">
-      press <ThemedText type="code">{shortcut}</ThemedText>
-    </ThemedText>
+    <View style={styles.container}>
+      <Text style={styles.judul}>MY APP</Text>
+      <Text style={styles.subJudul}>UTS MOBILE 1</Text>
+
+      <TextInput
+        style={styles.input}
+        placeholder="INPUT EMAIL"
+        value={email}
+        onChangeText={setEmail}
+        keyboardType="email-address"
+        autoCapitalize="none"
+      />
+
+      <TextInput
+        style={styles.input}
+        placeholder="INPUT PASSWORD"
+        value={password}
+        onChangeText={setPassword}
+        secureTextEntry
+      />
+
+      <TouchableOpacity
+        style={styles.tombolLogin}
+        onPress={() => navigation.navigate('Home')}
+      >
+        <Text style={styles.teksLogin}>TOMBOL LOGIN</Text>
+      </TouchableOpacity>
+    </View>
   );
 }
 
-export default function HomeScreen() {
+function HomeScreen() {
   return (
-    <ThemedView style={styles.container}>
-      <SafeAreaView style={styles.safeArea}>
-        <ThemedView style={styles.heroSection}>
-          <AnimatedIcon />
-          <ThemedText type="title" style={styles.title}>
-            Welcome to&nbsp;Expo
-          </ThemedText>
-        </ThemedView>
+    <View style={styles.containerHome}>
+      <Text style={styles.homeJudul}>HOME PAGE</Text>
 
-        <ThemedText type="code" style={styles.code}>
-          get started
-        </ThemedText>
+      <View style={styles.profilBox}>
+        <Image
+          source={require('../../assets/Fotoprofil.jpeg')}
+          style={styles.fotoLingkaran}
+        />
+        <Text style={styles.nama}>Muhammad Nabil Rizqullah</Text>
+      </View>
 
-        <ThemedView type="backgroundElement" style={styles.stepContainer}>
-          <HintRow
-            title="Try editing"
-            hint={<ThemedText type="code">src/app/index.tsx</ThemedText>}
-          />
-          <HintRow title="Dev tools" hint={getDevMenuHint()} />
-          <HintRow
-            title="Fresh start"
-            hint={<ThemedText type="code">npm run reset-project</ThemedText>}
-          />
-        </ThemedView>
+      <View style={styles.gridMenu}>
+        <TouchableOpacity style={styles.menuItem}>
+          <Text style={styles.menuTeks}>MENU 1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem}>
+          <Text style={styles.menuTeks}>MENU 1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem}>
+          <Text style={styles.menuTeks}>MENU 1</Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.menuItem}>
+          <Text style={styles.menuTeks}>MENU 1</Text>
+        </TouchableOpacity>
+      </View>
 
-        {Platform.OS === 'web' && <WebBadge />}
-      </SafeAreaView>
-    </ThemedView>
+      <TouchableOpacity style={styles.tombolLogout}>
+        <Text style={styles.teksLogout}>TOMBOL LOGOUT</Text>
+      </TouchableOpacity>
+    </View>
+  );
+}
+
+export default function App() {
+  return (
+    <NavigationContainer>
+      <Stack.Navigator initialRouteName="Login" screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="Login" component={LoginScreen} />
+        <Stack.Screen name="Home" component={HomeScreen} />
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    backgroundColor: '#fff',
     justifyContent: 'center',
-    flexDirection: 'row',
-  },
-  safeArea: {
-    flex: 1,
-    paddingHorizontal: Spacing.four,
     alignItems: 'center',
-    gap: Spacing.three,
-    paddingBottom: BottomTabInset + Spacing.three,
-    maxWidth: MaxContentWidth,
+    padding: 30,
   },
-  heroSection: {
-    alignItems: 'center',
-    justifyContent: 'center',
+  judul: {
+    fontSize: 28,
+    fontWeight: 'bold',
+    marginBottom: 5,
+  },
+  subJudul: {
+    fontSize: 18,
+    marginBottom: 60,
+  },
+  input: {
+    width: '100%',
+    borderWidth: 1,
+    borderColor: '#333',
+    padding: 12,
+    marginBottom: 15,
+    fontSize: 14,
+  },
+  tombolLogin: {
+    backgroundColor: '#ddd',
+    paddingVertical: 12,
+    paddingHorizontal: 40,
+    borderWidth: 1,
+    borderColor: '#333',
+    marginTop: 10,
+  },
+  teksLogin: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+
+  containerHome: {
     flex: 1,
-    paddingHorizontal: Spacing.four,
-    gap: Spacing.four,
+    backgroundColor: '#fff',
+    padding: 25,
+    paddingTop: 40,
   },
-  title: {
+  homeJudul: {
+    fontSize: 16,
     textAlign: 'center',
+    marginBottom: 30,
+    fontWeight: '500',
   },
-  code: {
-    textTransform: 'uppercase',
+  profilBox: {
+    alignItems: 'center',
+    marginBottom: 40,
   },
-  stepContainer: {
-    gap: Spacing.three,
-    alignSelf: 'stretch',
-    paddingHorizontal: Spacing.three,
-    paddingVertical: Spacing.four,
-    borderRadius: Spacing.four,
+  fotoLingkaran: {
+    width: 80,
+    height: 80,
+    borderRadius: 40,
+    borderWidth: 1,
+    borderColor: '#333',
+    justifyContent: 'center',
+    alignItems: 'center',
+    marginBottom: 8,
+  },
+  namaKamu: {
+    fontSize: 14,
+    fontWeight: '500',
+  },
+  gridMenu: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    justifyContent: 'space-between',
+    marginBottom: 50,
+  },
+  menuItem: {
+    width: '48%',
+    borderWidth: 1,
+    borderColor: '#333',
+    padding: 20,
+    alignItems: 'center',
+    marginBottom: 12,
+  },
+  menuTeks: {
+    fontSize: 14,
+  },
+  tombolLogout: {
+    borderWidth: 1,
+    borderColor: '#333',
+    paddingVertical: 12,
+    alignItems: 'center',
+  },
+  teksLogout: {
+    fontSize: 14,
+    fontWeight: '500',
   },
 });
